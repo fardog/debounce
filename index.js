@@ -23,6 +23,10 @@ module.exports = function debounce(func, wait, immediate){
   var timeout, args, context, timestamp, result;
   if (null == wait) wait = 100;
 
+  debounced.clear = clear;
+
+  return debounced;
+
   function later() {
     var last = now() - timestamp;
 
@@ -37,7 +41,14 @@ module.exports = function debounce(func, wait, immediate){
     }
   };
 
-  return function debounced() {
+  function clear() {
+    if(timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+
+  function debounced() {
     context = this;
     args = arguments;
     timestamp = now();
